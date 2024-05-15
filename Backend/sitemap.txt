@@ -1,0 +1,20 @@
+*SUPER ADMIN | DONE
+- add, delete admins | DONE
+- has previliges as admin | DONE
+- post projects {
+	title,
+	description,
+	finished_at (EX:20/4/2022),
+	duration (EX:4 months),
+	->{IMAGES}
+  }
+
+
+#CATEGORIES->{
+	apartment
+	villa
+	clinic
+	office
+	shop
+	mall
+}

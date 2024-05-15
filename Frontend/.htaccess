@@ -1,0 +1,16 @@
+# This Apache configuration file is used in single-page applications (SPAs) where all URL paths are
+# handled by the client-side JavaScript framework. It ensures that the web server serves the main
+# HTML file (typically containing the SPA code) for any URL, allowing the client-side routing to
+# take over and display the appropriate content based on the URL.
+
+# Activate the rewriting engine
+RewriteEngine on
+
+# Check if the requested filename does not exist as a regular file
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Check if the requested filename does not exist as a directory
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite the request to index.html for all non-existing files or directories
+RewriteRule . /index.html [L]

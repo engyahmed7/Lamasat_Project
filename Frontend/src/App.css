@@ -1,0 +1,95 @@
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/css/lightgallery.css");
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/css/lg-zoom.css");
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.4.0/css/lg-share.css");
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Roboto", sans-serif;
+}
+html:lang(ar) body {
+  font-family: "Cairo", sans-serif;
+}
+.slick-next {
+  right: 3px !important;
+}
+.slick-prev {
+  z-index: 99;
+  left: 3px !important;
+}
+.slick-dots {
+  bottom: 0px !important;
+}
+body:lang(ar) {
+  direction: rtl;
+}
+
+.social-buttons {
+  position: fixed;
+  right: 20px;
+  color: #fff;
+  /* width: 50px;
+  height: 50px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: #7603FE; */
+  border-radius: 50%;
+  font-size: 25px;
+  transition: 0.5s bottom ease-in-out;
+  bottom: -50px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.social-buttons.active {
+  bottom: 20px;
+}
+.fix-height {
+  min-height: calc(100vh - 115px);
+}
+.overflow-height {
+  height: calc(100vh);
+  overflow-x: hidden !important;
+}
+
+#lg-outer-2 {
+  direction: ltr !important;
+}
+.lg-inner {
+  direction: ltr !important;
+}
+
+.site_color_light {
+  background-color: "#EDFBE2"
+}
+
+
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 100%)); /* Single column layout by default */
+  gap: 5px; /* Gap between columns */
+}
+
+/* For medium screens and above */
+@media (min-width: 768px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(0, calc(50% - 10px))); /* Two columns with 10px gap */
+  }
+}
+
+/* For large screens and above */
+@media (min-width: 1024px) {
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(0, calc(33.33% - 20px))); /* Three columns with 20px gap */
+  }
+}

@@ -88,5 +88,51 @@ class projectController extends Controller
             ]);
         }
     }
+    public function update(Request $request,$projectId){
+        $project = Project::find($projectId);
+        if (!$project) {
+            return response()->json([
+                'error' => 'project not found',
+            ]);
+        }
+        $validator = Validator::make($request->all(), [
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|json|min:5',
+            'description' => 'required|json|min:5',
+            'finished_at' => 'required|string',
+            'duration' => 'required|string',
+            'images.*' => 'nullable|image|mimes:jpg,png',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ]);
+        }
+        $project->update([
+            'category_id' => $request->category_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'finished_at' => $request->finished_at,
+            'duration' => $request->duration,
+        ]);
+        if ($request->hasFile('images')) {
+            $image_paths = [];
+            foreach ($request->images as $img) {
+                $cc = Storage::putFile('images', $img);
+                ProjectPhoto::create([
+                    'project_id' => $project->id,
+                    'photo' => $cc,
+                ]);
+                $image_paths[] = url('') . '/' . $cc;
+            }
+        }
+        return response()->json([
+            'msg' => 'project updated successfully',
+            'project' => new ProjectResource($project),
+            'imgs' => $image_paths,
+        ]);
+       
+    }
+
 
 }

@@ -24,6 +24,7 @@
     "name": "Name",
     "password": "Password",
     "submitform": "REQUEST OFFER",
+    "editform": "EDIT OFFER",
     "attachments": "Attachments",
     "category": "Category",
     "endProjectDate": "End Project Date",

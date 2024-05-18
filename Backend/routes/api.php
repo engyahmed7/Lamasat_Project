@@ -28,6 +28,7 @@ Route::prefix("v1")->group(function () {
             Route::middleware('checkAdminStatus')->group(function () {
                 Route::post('add', [projectController::class, 'add']); // POST
                 Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
+                Route::put('update/{projectId}', [projectController::class, 'update']); // POST
             });
             });
 

@@ -15,6 +15,7 @@ import { hasCookie } from 'cookies-next';
 import Projects from './pages/admin/Projects';
 import Admins from './pages/admin/Admins';
 import AuthCallback from './components/AuthCallback';
+import EditProject from './pages/admin/EditProject';
 
 function App() {
   const token = hasCookie('access_token');
@@ -72,7 +73,10 @@ function App() {
           path="/admin/add-project"
           element={token ? <AddProject /> : <Navigate to="/" />}
         />
-
+        <Route
+          path="/admin/edit-project/:id"
+          element={token ? <EditProject /> : <Navigate to="/" />}
+        />
         <Route
           path="/*"
           element={<Navigate to="/" />}

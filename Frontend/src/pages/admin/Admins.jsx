@@ -14,7 +14,7 @@ const Admins = () => {
   const deleteHandle = async (id) => {
     try {
       await axios.get(
-        `https://api.lamasat.cloud/api/v1/deleteAdmin/${id}`,
+        `http://127.0.0.1:8000/api/v1/deleteAdmin/${id}`,
         {
           headers: {
             access_token: getCookie("access_token"),
@@ -33,7 +33,7 @@ const Admins = () => {
   const fetchDataAdmins = useCallback(async () => {
     try {
       const { data } = await axios.get(
-        "https://api.lamasat.cloud/api/v1/admins",
+        "http://127.0.0.1:8000/api/v1/admins",
         {
           headers: {
             access_token: getCookie("access_token"),

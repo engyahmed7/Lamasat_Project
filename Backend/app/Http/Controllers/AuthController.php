@@ -6,6 +6,8 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 use Str;
 use Validator;
 
@@ -148,6 +150,49 @@ class AuthController extends Controller
         return response()->json([
             'admins' => User::where('role', '!=', 'super_admin')->get(),
         ]);
+    }
+
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->stateless()->redirect();
+
+    }
+
+    public function handleGoogleCallback()
+    {
+        try {
+
+            $googleUser = Socialite::driver('google')->stateless()->user();
+
+            Log::info('Google User: ', (array) $googleUser);
+
+            if (!$googleUser || !$googleUser->getEmail()) {
+                Log::error('Failed to retrieve user information from Google');
+                return response()->json(['error' => 'Failed to retrieve user information from Google'], 400);
+            }
+
+            $user = User::where('email', $googleUser->getEmail())->first();
+
+            if (!$user) {
+                $user = User::create([
+                    'name' => $googleUser->getName(),
+                    'email' => $googleUser->getEmail(),
+                    'google_id' => $googleUser->getId(),
+                ]);
+            }
+
+            $token = Str::random(64);
+
+            $user->update(['access_token' => $token]);
+
+
+            $frontendUrl = 'http://localhost:3000/auth/callback';
+            return redirect($frontendUrl . '?token=' . $token);
+
+        } catch (\Exception $e) {
+            Log::error('Error during Google callback: ' . $e->getMessage());
+            return response()->json(['error' => 'Unauthorized: ' . $e->getMessage()], 401);
+        }
     }
 
 }

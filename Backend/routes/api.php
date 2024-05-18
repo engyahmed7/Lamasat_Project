@@ -17,6 +17,11 @@ Route::prefix("v1")->group(function () {
     Route::post('offers/add', [OfferController::class, 'add']); // POST
     //Login
     Route::post('login', [AuthController::class, 'login']);
+
+    // Google authentication
+    Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
+    Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+
     #Admin
     Route::middleware('admin')->group(function () {
         Route::prefix("projects")->group(function () {

@@ -6,6 +6,7 @@ import { setCookie } from "cookies-next";
 const LoginForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    
     const handleSubmit = async (e) => {
       e.preventDefault();
   
@@ -13,15 +14,18 @@ const LoginForm = () => {
       if (password === "") return toast.error("Password is required");
       try {
         const { data } = await axios.post(
-          "https://api.lamasat.cloud/api/v1/login",
+          "http://127.0.0.1:8000/api/v1/login",
           { email, password }
         );
+        console.log("data  "+data);
         if (data.error) return toast.error(data.error);
         setCookie("access_token", data.access_token);
         setCookie("super_admin", data.superadminrole);
         window.location.replace("/admin");
-      } catch (error) {
+      } 
+      catch (error) {
         toast.error("Please Check your data");
+        console.log("error: ",error);
       }
     };
   return (

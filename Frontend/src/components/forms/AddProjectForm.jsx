@@ -49,7 +49,7 @@ const AddProjectForm = () => {
 
     try {
       const { data } = await axios.post(
-        "https://api.lamasat.cloud/api/v1/projects/add",
+        "http://127.0.0.1:8000/api/v1/projects/add",
         formData, {
           headers: {
             access_token: getCookie('access_token')

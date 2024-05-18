@@ -86,6 +86,7 @@ class AuthController extends Controller
     public function deleteAdmin($adminId)
     {
         $admin = User::find($adminId);
+
         if ($admin) {
             $admin->delete();
             return response()->json([
@@ -98,6 +99,26 @@ class AuthController extends Controller
             ]);
         }
     }
+    public function toggleAdminStatus($adminId)
+    {
+        $admin = User::find($adminId);
+        if ($admin) {
+            $status = $admin->status == 1 ? 0 : 1;
+            $admin->update(['status' => $status]);
+
+            $action = $status == 1 ? 'activated' : 'deactivated';
+
+            return response()->json([
+                'message' => "Admin $action successfully",
+                'data' => new UserResource($admin),
+            ]);
+        } else {
+            return response()->json([
+                'message' => "No admin found by id $adminId",
+            ]);
+        }
+    }
+
     public function logout(Request $request)
     {
         $admin = User::where('access_token', '=', $request->header('access_token'))->first();

@@ -4,7 +4,7 @@ import AdminSidebar from '../../components/AdminSidebar';
 import Navbar from '../../components/Navbar';
 import { MdDelete } from 'react-icons/md';
 import axios from 'axios';
-import { deleteCookie, getCookie } from 'cookies-next';
+import { deleteCookie,getCookie } from 'cookies-next';
 import { toast } from 'react-toastify';
 
 const Projects = () => {
@@ -44,8 +44,8 @@ const Projects = () => {
       getAllProjects();
     } catch (error) {
       toast.error(error.response.data.error);
-      deleteCookie('access_token');
-      window.location.pathname = '/admin/login';
+      // deleteCookie('access_token');
+      //window.location.pathname = '/admin/login';
     }
   };
 

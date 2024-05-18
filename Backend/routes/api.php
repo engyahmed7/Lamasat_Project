@@ -25,13 +25,18 @@ Route::prefix("v1")->group(function () {
     #Admin
     Route::middleware('admin')->group(function () {
         Route::prefix("projects")->group(function () {
-            Route::post('add', [projectController::class, 'add']); // POST
-            Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
-        });
+            Route::middleware('checkAdminStatus')->group(function () {
+                Route::post('add', [projectController::class, 'add']); // POST
+                Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
+            });
+            });
+
         Route::prefix('offers')->group(function () {
             Route::get('all', [OfferController::class, 'showAllOffers']); // GET
             Route::get('show/{offerId}', [OfferController::class, 'show']); // GET
-            Route::get('delete/{offerId}', [OfferController::class, 'deleteOffer']); // GET
+            Route::middleware('checkAdminStatus')->group(function () {
+                Route::get('delete/{offerId}', [OfferController::class, 'deleteOffer']); // GET
+            });
         });
 
         //Change_Password
@@ -45,6 +50,8 @@ Route::prefix("v1")->group(function () {
         Route::get('admins', [AuthController::class, 'showAllAdmins']);
         Route::post('addAdmin', [AuthController::class, 'addAdmin']); // POST
         Route::get('deleteAdmin/{adminId}', [AuthController::class, 'deleteAdmin']); // GET
+        Route::post('toggleStatus/{adminId}',  [AuthController::class, 'toggleAdminStatus']);
+
     });
 
 });

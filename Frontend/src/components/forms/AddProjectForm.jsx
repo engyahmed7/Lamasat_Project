@@ -1,7 +1,7 @@
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { deleteCookie, getCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -67,8 +67,8 @@ const AddProjectForm = () => {
       setTitleEn("");
     } catch (error) {
       toast.error(error.response.data.error);
-    deleteCookie("access_token");
-    window.location.pathname = "/admin/login";
+    // deleteCookie("access_token");
+    // window.location.pathname = "/admin/login";
 
       
     }

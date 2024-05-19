@@ -134,7 +134,6 @@ class projectController extends Controller
         return response()->json([
             'msg' => 'project updated successfully',
             'project' => new ProjectResource($project),
-            'imgs' => $image_paths,
         ]);
     }
 }

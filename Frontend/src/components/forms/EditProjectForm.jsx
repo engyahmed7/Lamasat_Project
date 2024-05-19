@@ -1,11 +1,14 @@
 import { PhotoIcon } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { deleteCookie, getCookie } from "cookies-next";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 const EditProjectForm = () => {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [titleEn, setTitleEn] = useState("");
   const [titleAr, setTitleAr] = useState("");
@@ -14,6 +17,32 @@ const EditProjectForm = () => {
   const [descriptionAr, setDescriptionAr] = useState("");
   const [finished_at, setFinished_at] = useState("");
   const [images, setImages] = useState(null);
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/v1/projects/show/${id}`,
+          {
+            headers: {
+              access_token: getCookie("access_token"),
+            },
+          }
+        );
+        if (data) {
+          setTitleEn(data.project.title.en);
+          setTitleAr(data.project.title.ar);
+          setCategory_id(data.project.category.id);
+          setDescriptionEn(data.project.description.en);
+          setDescriptionAr(data.project.description.ar);
+          setFinished_at(data.project.finished_at);
+          setImages(data.project.images || []);
+        }
+      } catch (error) {
+        toast.error("Error fetching project data");
+      }
+    };
+    fetchProjectData();
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,35 +56,48 @@ const EditProjectForm = () => {
       return toast.error("Description Arabic is required");
     if (finished_at === "") return toast.error("End Project Date is required");
     if (images == null) return toast.error("Images is required");
-    const formData = new FormData();
-    for (let i = 0; i < images.length; i++) {
-      formData.append("images[]", images[i]);
-    }
-    const title = {
-      en: titleEn,
-      ar: titleAr,
-    };
-    const description = {
-      en: descriptionEn,
-      ar: descriptionAr,
-    };
-    formData.append("images[]", images);
-    formData.append("title", JSON.stringify(title));
-    formData.append("description", JSON.stringify(description));
-    formData.append("finished_at", finished_at);
-    formData.append("category_id", category_id);
-    formData.append("duration", "3");
 
     try {
-      const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/v1/projects/update/1",
-        formData, {
+      const title = {
+        en: titleEn,
+        ar: titleAr,
+      };
+      const description = {
+        en: descriptionEn,
+        ar: descriptionAr,
+      };
+
+      const requestData = {
+        title: JSON.stringify(title),
+        description: JSON.stringify(description),
+        finished_at,
+        category_id,
+        duration: "3",
+      };
+
+      // Append images to the requestData
+      const formData = new FormData();
+      for (let i = 0; i < images.length; i++) {
+        formData.append("images[]", images[i]);
+      }
+      // Convert formData to object
+      for (const [key, value] of formData.entries()) {
+        requestData[key] = value;
+      }
+      const { data } = await axios.put(
+        `http://localhost:8000/api/v1/projects/update/${id}`,
+        requestData,
+        {
           headers: {
-            access_token: getCookie('access_token')
-          }
+            access_token: getCookie("access_token"),
+          },
         }
       );
-      if (data.errors) return toast.error("Please Check your data");
+
+      if (data.errors) {
+        return toast.error("Please Check your data");
+      }
+
       toast.success("Project created successfully");
       setCategory_id("1");
       setImages(null);
@@ -64,12 +106,11 @@ const EditProjectForm = () => {
       setFinished_at("");
       setTitleAr("");
       setTitleEn("");
+      window.location.pathname = "/admin/projects";
     } catch (error) {
       toast.error(error.response.data.error);
-    deleteCookie("access_token");
-    window.location.pathname = "/admin/login";
-
-      
+      deleteCookie("access_token");
+      // window.location.pathname = "/admin/login";
     }
   };
 
@@ -194,7 +235,6 @@ const EditProjectForm = () => {
             id="desc"
             name="desc"
             maxLength={100}
-
             rows={3}
             onChange={(e) => setDescriptionEn(e.target.value)}
             className="outline-0 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6 px-2"

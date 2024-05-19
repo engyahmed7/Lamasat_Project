@@ -60,7 +60,7 @@ const Projects = () => {
 
   const updateHandle = async (id) => {
     console.log(id);
-    redirect(`http://localhost:8000/api/v1/admin/edit-project/${id}`);
+    window.location.pathname=`/admin/edit-project/${id}`;
   };
 
   return (

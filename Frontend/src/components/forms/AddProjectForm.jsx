@@ -46,7 +46,6 @@ const AddProjectForm = () => {
     formData.append("finished_at", finished_at);
     formData.append("category_id", category_id);
     formData.append("duration", "3");
-
     try {
       const { data } = await axios.post(
         "http://127.0.0.1:8000/api/v1/projects/add",

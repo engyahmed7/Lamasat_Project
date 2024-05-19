@@ -26,11 +26,13 @@ Route::prefix("v1")->group(function () {
     Route::middleware('admin')->group(function () {
         Route::prefix("projects")->group(function () {
             Route::middleware('checkAdminStatus')->group(function () {
-                Route::post('add', [projectController::class, 'add']); // POST
-                Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
-                Route::put('update/{projectId}', [projectController::class, 'update']); // POST
+                Route::middleware('check_user_token')->group(function () {
+                    Route::post('add', [projectController::class, 'add']); // POST
+                    Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
+                    Route::put('update/{projectId}', [projectController::class, 'update']); // POST
+                });
             });
-            });
+        });
 
         Route::prefix('offers')->group(function () {
             Route::get('all', [OfferController::class, 'showAllOffers']); // GET
@@ -52,7 +54,5 @@ Route::prefix("v1")->group(function () {
         Route::post('addAdmin', [AuthController::class, 'addAdmin']); // POST
         Route::get('deleteAdmin/{adminId}', [AuthController::class, 'deleteAdmin']); // GET
         Route::post('toggleStatus/{adminId}',  [AuthController::class, 'toggleAdminStatus']);
-
     });
-
 });

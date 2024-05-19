@@ -25,6 +25,7 @@ class ProjectResource extends JsonResource
             'finished_at' => $this->finished_at,
             'duration' => $this->duration,
             'images' => ProjectPhotoResource::collection($this->projectPhotos),
+            'admin_id' => $this->admin_id,
         ];
     }
 }

@@ -8,14 +8,17 @@ use App\Models\ProjectPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class projectController extends Controller
 {
-    public function showAllProjects()
+    public function showAllProjects(Request $request)
     {
+        $user = User::where('access_token', $request->header('access_token'))->first();
         $projects = Project::orderBy('id', 'desc')->get();
         return response()->json([
             'projects' => ProjectResource::collection($projects),
+            'admin_id' => $user->id,
         ]);
     }
 
@@ -53,6 +56,7 @@ class projectController extends Controller
             'description' => $request->description,
             'finished_at' => $request->finished_at,
             'duration' => $request->duration,
+            'admin_id' => User::where('access_token', '=', $request->header('access_token'))->first()->id,
         ]);
 
         if ($request->hasFile('images')) {
@@ -72,7 +76,7 @@ class projectController extends Controller
             'imgs' => $image_paths,
         ]);
     }
-    
+
     public function delete($projectId)
     {
         $project = Project::find($projectId);
@@ -88,7 +92,8 @@ class projectController extends Controller
             ]);
         }
     }
-    public function update(Request $request,$projectId){
+    public function update(Request $request, $projectId)
+    {
         $project = Project::find($projectId);
         if (!$project) {
             return response()->json([
@@ -131,8 +136,5 @@ class projectController extends Controller
             'project' => new ProjectResource($project),
             'imgs' => $image_paths,
         ]);
-       
     }
-
-
 }

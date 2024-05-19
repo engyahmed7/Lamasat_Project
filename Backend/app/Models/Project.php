@@ -15,6 +15,7 @@ class Project extends Model
         'description',
         'finished_at',
         'duration',
+        'admin_id',
     ];
 
 
@@ -28,4 +29,8 @@ class Project extends Model
         return $this->hasMany(ProjectPhoto::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

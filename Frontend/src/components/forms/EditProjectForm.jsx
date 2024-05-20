@@ -6,6 +6,9 @@ import { deleteCookie, getCookie } from "cookies-next";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 const EditProjectForm = () => {
+  const baseUrl =
+    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
+
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -21,7 +24,7 @@ const EditProjectForm = () => {
     const fetchProjectData = async () => {
       try {
         const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/v1/projects/show/${id}`,
+          `${baseUrl}/api/v1/projects/show/${id}`,
           {
             headers: {
               access_token: getCookie("access_token"),
@@ -85,7 +88,7 @@ const EditProjectForm = () => {
         requestData[key] = value;
       }
       const { data } = await axios.put(
-        `http://localhost:8000/api/v1/projects/update/${id}`,
+        `${baseUrl}/api/v1/projects/update/${id}`,
         requestData,
         {
           headers: {
@@ -98,7 +101,7 @@ const EditProjectForm = () => {
         return toast.error("Please Check your data");
       }
 
-      toast.success("Project created successfully");
+      toast.success("Project updated successfully");
       setCategory_id("1");
       setImages(null);
       setDescriptionAr("");

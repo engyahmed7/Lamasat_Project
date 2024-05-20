@@ -9,12 +9,15 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Admins = () => {
+  const baseUrl =
+    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
+
   const [admins, setAdmins] = useState([]);
   const { t } = useTranslation();
 
   const deleteHandle = async (id) => {
     try {
-      await axios.get(`http://127.0.0.1:8000/api/v1/deleteAdmin/${id}`, {
+      await axios.get(`${baseUrl}/api/v1/deleteAdmin/${id}`, {
         headers: {
           access_token: getCookie("access_token"),
         },
@@ -30,7 +33,7 @@ const Admins = () => {
   const toggleStatusHandle = async (id) => {
     try {
       const response = await axios.post(
-        `http://127.0.0.1:8000/api/v1/toggleStatus/${id}`,
+        `${baseUrl}/api/v1/toggleStatus/${id}`,
         {},
         {
           headers: {
@@ -47,7 +50,7 @@ const Admins = () => {
 
   const fetchDataAdmins = useCallback(async () => {
     try {
-      const { data } = await axios.get("http://127.0.0.1:8000/api/v1/admins", {
+      const { data } = await axios.get(`${baseUrl}/api/v1/admins`, {
         headers: {
           access_token: getCookie("access_token"),
         },

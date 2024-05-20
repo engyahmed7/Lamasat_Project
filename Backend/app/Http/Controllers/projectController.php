@@ -14,11 +14,18 @@ class projectController extends Controller
 {
     public function showAllProjects(Request $request)
     {
+        if (!$request->header('access_token')) {
+            $projects = Project::orderBy('id', 'desc')->get();
+            return response()->json([
+                'projects' => ProjectResource::collection($projects),
+            ]);
+        }
         $user = User::where('access_token', $request->header('access_token'))->first();
         $projects = Project::orderBy('id', 'desc')->get();
         return response()->json([
             'projects' => ProjectResource::collection($projects),
             'admin_id' => $user->id,
+            'user_role' => $user->role,
         ]);
     }
 

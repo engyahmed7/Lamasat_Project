@@ -10,23 +10,24 @@ import { toast } from "react-toastify";
 import { redirect } from "react-router-dom";
 
 const Projects = () => {
+  const baseUrl =
+    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
+
   const [projects, setProjects] = useState([]);
   const { t, i18n } = useTranslation();
   const [adminId, setAdminId] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   const getAllProjects = useCallback(async () => {
     try {
-      const { data } = await axios.get(
-        // "https://api.lamasat.cloud/api/v1/projects/all"
-        "http://127.0.0.1:8000/api/v1/projects/all",
-        {
-          headers: {
-            access_token: getCookie("access_token"),
-          },
-        }
-      );
+      const { data } = await axios.get(`${baseUrl}/api/v1/projects/all`, {
+        headers: {
+          access_token: getCookie("access_token"),
+        },
+      });
       setProjects(data.projects);
       setAdminId(data.admin_id);
+      setUserRole(data.user_role);
     } catch (error) {
       toast.error(error.response.data.error);
       deleteCookie("access_token");
@@ -40,27 +41,23 @@ const Projects = () => {
 
   const deleteHandle = async (id) => {
     try {
-      await axios.get(
-        `http://localhost:8000/api/v1/projects/delete/${id}`,
-        // `https://api.lamasat.cloud/api/v1/projects/delete/${id}`,
-        {
-          headers: {
-            access_token: getCookie("access_token"),
-          },
-        }
-      );
+      await axios.get(`${baseUrl}/api/v1/projects/delete/${id}`, {
+        headers: {
+          access_token: getCookie("access_token"),
+        },
+      });
       // refetch admins after deletion
       getAllProjects();
     } catch (error) {
       toast.error(error.response.data.error);
-      // deleteCookie("access_token");
-      // window.location.pathname = "/admin/login";
+      deleteCookie("access_token");
+      window.location.pathname = "/admin/login";
     }
   };
 
   const updateHandle = async (id) => {
     console.log(id);
-    window.location.pathname=`/admin/edit-project/${id}`;
+    window.location.pathname = `/admin/edit-project/${id}`;
   };
 
   return (
@@ -90,9 +87,9 @@ const Projects = () => {
                         ? project?.title?.en
                         : project?.title?.ar}
                     </p>
-
-                    {adminId === project.admin_id && (
-                      <div>
+                    <div>
+                      {(adminId === project.admin_id ||
+                        userRole === "super_admin") && (
                         <button
                           type="button"
                           onClick={() => deleteHandle(project?.id)}
@@ -100,6 +97,8 @@ const Projects = () => {
                         >
                           <MdDelete />
                         </button>
+                      )}
+                      {adminId === project.admin_id && (
                         <button
                           type="button"
                           onClick={() => updateHandle(project?.id)}
@@ -107,14 +106,12 @@ const Projects = () => {
                         >
                           <FaEdit />
                         </button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                  <a
-                    href={`https://api.lamasat.cloud/${project?.images[0]?.photo}`}
-                  >
+                  <a href={`${baseUrl}${project?.images[0]?.photo}`}>
                     <img
-                      src={`https://api.lamasat.cloud/${project?.images[0]?.photo}`}
+                      src={`${baseUrl}${project?.images[0]?.photo}`}
                       alt="image_project"
                       width={300}
                       height={400}

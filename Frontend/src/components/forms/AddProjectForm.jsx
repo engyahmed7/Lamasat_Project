@@ -6,6 +6,8 @@ import { getCookie } from "cookies-next";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 const AddProjectForm = () => {
+  const baseUrl =
+    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
   const { t } = useTranslation();
 
   const [titleEn, setTitleEn] = useState("");
@@ -48,11 +50,12 @@ const AddProjectForm = () => {
     formData.append("duration", "3");
     try {
       const { data } = await axios.post(
-        "http://127.0.0.1:8000/api/v1/projects/add",
-        formData, {
+        `${baseUrl}/api/v1/projects/add`,
+        formData,
+        {
           headers: {
-            access_token: getCookie('access_token')
-          }
+            access_token: getCookie("access_token"),
+          },
         }
       );
       if (data.errors) return toast.error("Please Check your data");
@@ -66,10 +69,8 @@ const AddProjectForm = () => {
       setTitleEn("");
     } catch (error) {
       toast.error(error.response.data.error);
-    // deleteCookie("access_token");
-    // window.location.pathname = "/admin/login";
-
-      
+      // deleteCookie("access_token");
+      // window.location.pathname = "/admin/login";
     }
   };
 
@@ -194,7 +195,6 @@ const AddProjectForm = () => {
             id="desc"
             name="desc"
             maxLength={100}
-
             rows={3}
             onChange={(e) => setDescriptionEn(e.target.value)}
             className="outline-0 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6 px-2"

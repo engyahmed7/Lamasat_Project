@@ -176,7 +176,6 @@ class AuthController extends Controller
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->stateless()->redirect();
-
     }
 
     public function handleGoogleCallback()
@@ -206,14 +205,17 @@ class AuthController extends Controller
 
             $user->update(['access_token' => $token]);
 
+            // $baseUrl = env('APP_ENV') === 'production'
+            //     ? env('LARAVEL_APP_UIAPI_BASE_URL')
+            //     : 'http://localhost:3000';
+
+            // $frontendUrl = `{$baseUrl}/auth/callback`;
 
             $frontendUrl = 'http://localhost:3000/auth/callback';
             return redirect($frontendUrl . '?token=' . $token);
-
         } catch (\Exception $e) {
             Log::error('Error during Google callback: ' . $e->getMessage());
             return response()->json(['error' => 'Unauthorized: ' . $e->getMessage()], 401);
         }
     }
-
 }

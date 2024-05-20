@@ -26,10 +26,12 @@ Route::prefix("v1")->group(function () {
     Route::middleware('admin')->group(function () {
         Route::prefix("projects")->group(function () {
             Route::middleware('checkAdminStatus')->group(function () {
-                Route::middleware('check_user_token')->group(function () {
-                    Route::post('add', [projectController::class, 'add']); // POST
-                    Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
+                Route::post('add', [projectController::class, 'add']); // POST
+                Route::middleware('canUpdate')->group(function () {
                     Route::put('update/{projectId}', [projectController::class, 'update']); // POST
+                });
+                Route::middleware('canDelete')->group(function () {
+                    Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
                 });
             });
         });

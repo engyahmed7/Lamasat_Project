@@ -5,12 +5,15 @@ import { useTranslation } from "react-i18next";
 import { deleteCookie, getCookie } from "cookies-next";
 
 const AddAdminForm = () => {
-  const { t } = useTranslation();
+  const baseUrl =
+    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
 
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phone_number, setPhone_number] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (email === "") return toast.error("Email is required");
@@ -19,7 +22,7 @@ const AddAdminForm = () => {
     if (phone_number === "") return toast.error("Phone Number is required");
     try {
       const { data } = await axios.post(
-        "https://api.lamasat.cloud/api/v1/addAdmin",
+        `${baseUrl}/api/v1/addAdmin`,
         { email, password, name, phone_number },
         {
           headers: {

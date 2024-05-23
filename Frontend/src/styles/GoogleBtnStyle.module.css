@@ -1,0 +1,32 @@
+.googleSigninBtn {
+    background: white;
+    border: 1px solid #ddd;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    space-x-2: space-between;
+    border-radius: 9999px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .googleSigninBtn:hover {
+    background: #f7f7f7;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .googleSigninBtn:focus {
+    border-color: #4285f4;
+  }
+  
+  .icon {
+    color: #DB4437;
+  }
+  
+  .text {
+    color: #5F6368;
+    padding-left: 10px;
+  }
+  

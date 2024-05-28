@@ -2,6 +2,7 @@ import React from 'react';
 import LoginForm from '../../components/forms/LoginForm';
 import Navbar from '../../components/Navbar';
 import GoogleLoginButton from '../../components/GoogleLoginButton';
+import FacebookLoginButton from '../../components/FacebookLoginButton';
 
 const Login = () => {
   return (
@@ -13,6 +14,8 @@ const Login = () => {
         </h3>
         <LoginForm />
         <GoogleLoginButton />
+        <br />
+        <FacebookLoginButton />
       </div>
     </>
   );

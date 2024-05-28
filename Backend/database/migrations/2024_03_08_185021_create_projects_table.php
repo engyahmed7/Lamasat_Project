@@ -17,9 +17,12 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->string('finished_at')->nullable();
             $table->string('duration')->nullable();
+            $table->unsignedBigInteger('admin_id');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
+
     /**
      * Reverse the migrations.
      */

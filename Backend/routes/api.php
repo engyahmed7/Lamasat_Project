@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialiteController;
 
 Route::prefix("v1")->group(function () {
     #AUTH
@@ -21,7 +22,9 @@ Route::prefix("v1")->group(function () {
     // Google authentication
     Route::get('auth/google', [AuthController::class, 'redirectToGoogle']);
     Route::get('auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-
+    // Facebook authentication
+    Route::get('auth/facebook', [SocialiteController::class, 'redirectToFacebook'])->name('facebook.login');
+    Route::get('auth/facebook/callback', [SocialiteController::class, 'handleFacebookCallback'])->name('facebook.callback');
     #Admin
     Route::middleware('admin')->group(function () {
         Route::prefix("projects")->group(function () {

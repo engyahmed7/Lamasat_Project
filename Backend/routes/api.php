@@ -36,8 +36,12 @@ Route::prefix("v1")->group(function () {
                 Route::middleware('canDelete')->group(function () {
                     Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
                 });
+
+
             });
-        });
+
+            });
+
 
         Route::prefix('offers')->group(function () {
             Route::get('all', [OfferController::class, 'showAllOffers']); // GET

@@ -69,5 +69,7 @@ class Kernel extends HttpKernel
         'checkAdminStatus' => \App\Http\Middleware\CheckAdminStatus::class,
         'canDelete' => \App\Http\Middleware\CanDelete::class,
         'canUpdate' => \App\Http\Middleware\CanUpdate::class,
+        'showAdminProjects' => \App\Http\Middleware\ShowAdminProjects::class,
+
     ];
 }

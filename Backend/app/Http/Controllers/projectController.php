@@ -21,13 +21,18 @@ class projectController extends Controller
             ]);
         }
         $user = User::where('access_token', $request->header('access_token'))->first();
-        $projects = Project::orderBy('id', 'desc')->get();
+        if ($user->role == 'admin') {
+            $projects = Project::where('admin_id', $user->id)->orderBy('id', 'desc')->get();
+        } else {
+            $projects = Project::orderBy('id', 'desc')->get();
+        }
         return response()->json([
             'projects' => ProjectResource::collection($projects),
             'admin_id' => $user->id,
             'user_role' => $user->role,
         ]);
     }
+
 
     public function show($projectId)
     {

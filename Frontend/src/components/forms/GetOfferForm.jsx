@@ -28,7 +28,7 @@ const GetOfferForm = () => {
     if (attachment === null) return toast.error("Attachment is required");
     const formData = new FormData();
     formData.append("email", email);
-    formData.append("attachment", attachment);
+    formData.append("attachment", attachment[0]);
     formData.append("phone_number", phone_number);
     formData.append("unit_type", unit_type);
     formData.append("unit_area", unit_area);

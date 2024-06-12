@@ -4,8 +4,9 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import styles from '../styles/GoogleBtnStyle.module.css'
 
 const GoogleLoginButton = () => {
+  const baseUrl = process.env.REACT_APP_UIAPI_BASE_URL;
   const handleGoogleLogin = () => {
-    window.location.href = "http://127.0.0.1:8000/api/v1/auth/google";
+    window.location.href = `${baseUrl}/api/v1/auth/google`;
   };
 
   return (

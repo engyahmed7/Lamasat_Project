@@ -36,11 +36,9 @@ Route::prefix("v1")->group(function () {
                 Route::middleware('canDelete')->group(function () {
                     Route::get('delete/{projectId}', [projectController::class, 'delete']); // GET
                 });
-
-
             });
 
-            });
+        });
 
 
         Route::prefix('offers')->group(function () {
@@ -62,6 +60,6 @@ Route::prefix("v1")->group(function () {
         Route::get('admins', [AuthController::class, 'showAllAdmins']);
         Route::post('addAdmin', [AuthController::class, 'addAdmin']); // POST
         Route::get('deleteAdmin/{adminId}', [AuthController::class, 'deleteAdmin']); // GET
-        Route::post('toggleStatus/{adminId}',  [AuthController::class, 'toggleAdminStatus']);
+        Route::post('toggleStatus/{adminId}', [AuthController::class, 'toggleAdminStatus']);
     });
 });

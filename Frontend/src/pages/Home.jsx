@@ -20,8 +20,8 @@ import { BsFillBuildingsFill } from "react-icons/bs";
 import { IoCall } from "react-icons/io5";
 
 const Home = () => {
-  const baseUrl =
-    process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
+  const baseUrl = process.env.REACT_APP_UIAPI_BASE_URL;
+    console.log(baseUrl);
 
   const { t, i18n } = useTranslation();
   const [category, setCategory] = useState("");
@@ -63,6 +63,7 @@ const Home = () => {
   };
 
   const getAllProjects = async () => {
+    console.log(baseUrl);
     const { data } = await axios.get(`${baseUrl}/api/v1/projects/all`);
     console.log("hrtev", data.projects);
 

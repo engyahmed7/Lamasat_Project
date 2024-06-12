@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { setCookie } from "cookies-next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const LoginForm = () => {
   const baseUrl =
@@ -9,8 +11,10 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading , setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
 
     if (email === "") return toast.error("Email is required");
@@ -28,6 +32,8 @@ const LoginForm = () => {
     } catch (error) {
       toast.error("Please Check your data");
       console.log("error: ", error);
+    } finally{
+      setLoading(false)
     }
   };
   return (
@@ -70,12 +76,22 @@ const LoginForm = () => {
           />
         </div>
       </div>
-      <button
-        type="submit"
-        className="rounded-md mt-4 bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-      >
-        Login
-      </button>
+      {loading ? (
+          <button
+            type="button"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm flex items-center justify-center"
+            disabled
+          >
+          <FontAwesomeIcon icon={faSpinner} spin className="text-white mr-2" />Login
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            Login
+          </button>
+        )}
     </form>
   );
 };

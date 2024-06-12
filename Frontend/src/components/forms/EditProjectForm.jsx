@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import { deleteCookie, getCookie } from "cookies-next";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 const EditProjectForm = () => {
   const baseUrl =
     process.env.REACT_APP_UIAPI_BASE_URL || "http://127.0.0.1:8000";
@@ -20,6 +23,8 @@ const EditProjectForm = () => {
   const [descriptionAr, setDescriptionAr] = useState("");
   const [finished_at, setFinished_at] = useState("");
   const [images, setImages] = useState(null);
+  const [loading , setLoading] = useState(false);
+
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
@@ -42,6 +47,8 @@ const EditProjectForm = () => {
         }
       } catch (error) {
         toast.error("Error fetching project data");
+      } finally{
+        setLoading(false);
       }
     };
     fetchProjectData();
@@ -49,6 +56,7 @@ const EditProjectForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     if (titleEn === "") return toast.error("Title English is required");
     if (titleAr === "") return toast.error("Title Arabic is required");
@@ -281,12 +289,22 @@ const EditProjectForm = () => {
         </div>
       </div>
       <div>
-        <button
-          type="submit"
-          className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          {t("editform")}
-        </button>
+        {loading ? (
+          <button
+            type="button"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm flex items-center justify-center"
+            disabled
+          >
+          <FontAwesomeIcon icon={faSpinner} spin className="text-white mr-2" />{t("editform")}
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {t("editform")}
+          </button>
+        )}
       </div>
     </form>
   );

@@ -2,6 +2,9 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { getCookie } from "cookies-next";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 
 import axios from "axios";
 import { useTranslation } from "react-i18next";
@@ -17,8 +20,10 @@ const AddProjectForm = () => {
   const [descriptionAr, setDescriptionAr] = useState("");
   const [finished_at, setFinished_at] = useState("");
   const [images, setImages] = useState(null);
+  const [loading , setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
+    setLoading(true);
     event.preventDefault();
 
     if (titleEn === "") return toast.error("Title English is required");
@@ -58,7 +63,10 @@ const AddProjectForm = () => {
           },
         }
       );
-      if (data.errors) return toast.error("Please Check your data");
+      if (data.errors) {
+        console.log(data.errors);
+        return toast.error("Please Check your data");
+      }
       toast.success("Project created successfully");
       setCategory_id("1");
       setImages(null);
@@ -71,6 +79,8 @@ const AddProjectForm = () => {
       toast.error(error.response.data.error);
       // deleteCookie("access_token");
       // window.location.pathname = "/admin/login";
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -238,12 +248,23 @@ const AddProjectForm = () => {
         </div>
       </div>
       <div>
-        <button
-          type="submit"
-          className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-          {t("submitform")}
-        </button>
+
+      {loading ? (
+          <button
+            type="button"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm flex items-center justify-center"
+            disabled
+          >
+          <FontAwesomeIcon icon={faSpinner} spin className="text-white mr-2" />            {t("submitform")}
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="my-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          >
+            {t("submitform")}
+          </button>
+        )}
       </div>
     </form>
   );
